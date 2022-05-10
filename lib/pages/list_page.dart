@@ -11,17 +11,19 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   late TextEditingController _nameController;
   late TextEditingController _countController;
+  late TextEditingController _alcoholDegreeController;
   // List data = [];
   // demo data
   List data = [
-    {"name": "jin", "count": 2},
-    {"name": "vodka", "count": 2},
+    {"name": "jin", "count": 2, "alcoholDegree": 47},
+    {"name": "vodka", "count": 2, "alcoholDegree": 40},
   ];
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _countController = TextEditingController();
+    _alcoholDegreeController = TextEditingController();
   }
 
   @override
@@ -49,6 +51,11 @@ class _ListPageState extends State<ListPage> {
                     data[index]["count"] -= 1;
                   });
                 },
+                deleteItem: () {
+                  setState(() {
+                    data.removeAt(index);
+                  });
+                },
               )),
           itemCount: data.length,
         ),
@@ -70,16 +77,24 @@ class _ListPageState extends State<ListPage> {
                         controller: _countController,
                         keyboardType: TextInputType.number,
                       )),
+                      Flexible(
+                          child: TextFormField(
+                        controller: _alcoholDegreeController,
+                        keyboardType: TextInputType.number,
+                      )),
                     ],
                   ),
                   actions: [
                     TextButton(
                         onPressed: () {
                           if (_nameController.text != "" &&
-                              _countController.text != "") {
+                              _countController.text != "" &&
+                              _alcoholDegreeController.text != "") {
                             data.add({
                               "name": _nameController.text,
-                              "count": int.parse(_countController.text)
+                              "count": int.parse(_countController.text),
+                              "alcoholDegree":
+                                  int.parse(_alcoholDegreeController.text)
                             });
                             Navigator.of(context).pop();
                             return;
