@@ -1,4 +1,5 @@
 import 'package:alcoholic_beverage_counter/widgets/list_item.dart';
+import 'package:alcoholic_beverage_counter/widgets/parameter_row.dart';
 import 'package:flutter/material.dart';
 
 class ListPage extends StatefulWidget {
@@ -36,31 +37,48 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-          itemBuilder: ((context, index) => ListItem(
-                data: data,
-                index: index,
-                incrementCount: () {
-                  setState(() {
-                    data[index]["count"] += 1;
-                  });
-                },
-                decrementCount: () {
-                  setState(() {
-                    if (data[index]["count"] <= 0) return;
-                    data[index]["count"] -= 1;
-                  });
-                },
-                deleteItem: () {
-                  setState(() {
-                    data.removeAt(index);
-                  });
-                },
-              )),
-          itemCount: data.length,
+        child: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text(
+                  "飲んだお酒一覧",
+                  style: TextStyle(color: Colors.grey[600], fontSize: 20),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: ((context, index) => ListItem(
+                        data: data,
+                        index: index,
+                        incrementCount: () {
+                          setState(() {
+                            data[index]["count"] += 1;
+                          });
+                        },
+                        decrementCount: () {
+                          setState(() {
+                            if (data[index]["count"] <= 0) return;
+                            data[index]["count"] -= 1;
+                          });
+                        },
+                        deleteItem: () {
+                          setState(() {
+                            data.removeAt(index);
+                          });
+                        },
+                      )),
+                  itemCount: data.length,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey,
         onPressed: () {
           print("pressed");
           showDialog(
@@ -70,18 +88,20 @@ class _ListPageState extends State<ListPage> {
                   title: Text("お酒の追加"),
                   content: Column(
                     children: [
-                      Flexible(
-                          child: TextFormField(controller: _nameController)),
-                      Flexible(
-                          child: TextFormField(
+                      ParameterRow(
+                        controller: _nameController,
+                        rowName: "名前",
+                      ),
+                      ParameterRow(
                         controller: _countController,
-                        keyboardType: TextInputType.number,
-                      )),
-                      Flexible(
-                          child: TextFormField(
+                        rowName: "杯数",
+                        tailText: "杯",
+                      ),
+                      ParameterRow(
                         controller: _alcoholDegreeController,
-                        keyboardType: TextInputType.number,
-                      )),
+                        rowName: "アルコール度数",
+                        tailText: "%",
+                      )
                     ],
                   ),
                   actions: [
@@ -115,6 +135,10 @@ class _ListPageState extends State<ListPage> {
         },
         child: Icon(Icons.add),
       ),
+      bottomNavigationBar: BottomNavigationBar(items: [
+        BottomNavigationBarItem(icon: Icon(Icons.list), label: "リスト"),
+        BottomNavigationBarItem(icon: Icon(Icons.auto_graph), label: "グラフ"),
+      ]),
     );
   }
 }
