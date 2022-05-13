@@ -16,12 +16,7 @@ class _MainPageState extends State<MainPage> {
     {"name": "vodka", "count": 2, "alcoholDegree": 40},
   ];
   int _currentIndex = 0;
-  List<Widget> pages = <Widget>[
-    ListScreen(
-      data: data,
-    ),
-    const GraphScreen()
-  ];
+
   late TextEditingController _nameController;
   late TextEditingController _countController;
   late TextEditingController _alcoholDegreeController;
@@ -45,6 +40,12 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> pages = <Widget>[
+      ListScreen(
+        data: data,
+      ),
+      const GraphScreen()
+    ];
     return Scaffold(
       body: pages.elementAt(_currentIndex),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
